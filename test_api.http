@@ -1,0 +1,5 @@
+
+@baseUrl = https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=3fb1ebc3ac05862552bfb3f86cfac2f3
+
+GET {{baseUrl}}
+Accept: application/json
