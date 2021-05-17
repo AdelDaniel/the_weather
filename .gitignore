@@ -1,4 +1,6 @@
 lib/services/api_keys.dart
+lib/services/test_api.http
+
 # Miscellaneous
 *.class
 *.log
