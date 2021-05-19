@@ -8,12 +8,15 @@ import 'city_screen.dart';
 
 class LocationScreen extends StatelessWidget with IconAndMessege {
   static const String id = "LocationScreen";
+  final WeatherModel weatherModel;
+
+  const LocationScreen({Key key, this.weatherModel}) : super(key: key);
+
   //to deal with states and data comes from nevigators
 
   @override
   Widget build(BuildContext context) {
-    final weatherModel =
-        ModalRoute.of(context).settings.arguments as WeatherModel;
+    // ModalRoute.of(context).settings.arguments as WeatherModel;
 
     return Scaffold(
       body: Container(
@@ -78,6 +81,7 @@ class LocationScreen extends StatelessWidget with IconAndMessege {
               Column(
                 children: [
                   Padding(
+                    // height: MediaQuery.of(context).size.height,
                     padding: EdgeInsets.only(right: 15.0),
                     child: Text(
                       weatherModel.main.temp == null
@@ -87,7 +91,11 @@ class LocationScreen extends StatelessWidget with IconAndMessege {
                               weatherModel.name,
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                          fontSize: 70.0, fontWeight: FontWeight.bold),
+                          fontSize: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? 70.0
+                              : 30,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
