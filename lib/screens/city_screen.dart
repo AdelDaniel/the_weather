@@ -28,98 +28,101 @@ class CityScreen extends StatelessWidget {
         ),
         constraints: BoxConstraints.expand(),
         child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(context, null),
-                      child: Icon(Icons.arrow_back_ios, size: 50.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context, null),
+                        child: Icon(Icons.arrow_back_ios, size: 50.0),
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: TextButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, CubitTestScreen.id),
-                      child: Icon(Icons.local_airport, size: 50.0),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, CubitTestScreen.id),
+                        child: Icon(Icons.local_airport, size: 50.0),
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: TextButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, GeolocatorTestScreen.id),
-                      child: Icon(Icons.location_pin, size: 50.0),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: TextButton(
+                        onPressed: () => Navigator.pushNamed(
+                            context, GeolocatorTestScreen.id),
+                        child: Icon(Icons.location_pin, size: 50.0),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: StreamBuilder<String>(
-                    stream: streamController.stream,
-                    builder: (context, snapshot) {
-                      return TextField(
-                        controller: textEditingController,
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                            errorText: snapshot.error,
-                            filled: true,
-                            fillColor: Colors.black12,
-                            hintText: 'Enter the City Name',
-                            icon: Icon(
-                              Icons.location_city,
-                              size: 30.0,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0)),
-                            )),
-                        onChanged: (String value) {
-                          streamController.sink.add(value);
-                        },
-                      );
-                    }),
-              ),
-              TextButton(
-                onPressed: () async {
-                  var connectivityResult =
-                      await (Connectivity().checkConnectivity());
-                  if (connectivityResult == ConnectivityResult.none) {
-                    streamController.sink
-                        .addError("Oops! check Your internet connection");
-                  } else {
-                    print('city Name :: ' + textEditingController.text);
-                    if (textEditingController.text.isEmpty) {
-                      streamController.sink.addError("Enter City Name!");
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: StreamBuilder<String>(
+                      stream: streamController.stream,
+                      builder: (context, snapshot) {
+                        return TextField(
+                          controller: textEditingController,
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                              errorText: snapshot.error,
+                              filled: true,
+                              fillColor: Colors.black12,
+                              hintText: 'Enter the City Name',
+                              icon: Icon(
+                                Icons.location_city,
+                                size: 30.0,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50.0)),
+                              )),
+                          onChanged: (String value) {
+                            streamController.sink.add(value);
+                          },
+                        );
+                      }),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    var connectivityResult =
+                        await (Connectivity().checkConnectivity());
+                    if (connectivityResult == ConnectivityResult.none) {
+                      streamController.sink
+                          .addError("Oops! check Your internet connection");
                     } else {
-                      WeatherAppService weatherAppService = WeatherAppService();
-                      WeatherModel wm;
-                      try {
-                        wm = await weatherAppService
-                            .getWeatherByCityName(textEditingController.text);
-                        if (wm == null) {
+                      print('city Name :: ' + textEditingController.text);
+                      if (textEditingController.text.isEmpty) {
+                        streamController.sink.addError("Enter City Name!");
+                      } else {
+                        WeatherAppService weatherAppService =
+                            WeatherAppService();
+                        WeatherModel wm;
+                        try {
+                          wm = await weatherAppService
+                              .getWeatherByCityName(textEditingController.text);
+                          if (wm == null) {
+                            streamController.sink
+                                .addError('No country with that name!');
+                          } else
+                            Navigator.pushNamed(context, LocationScreen.id,
+                                arguments: wm);
+                        } catch (e) {
                           streamController.sink
-                              .addError('No country with that name!');
-                        } else
-                          Navigator.pushNamed(context, LocationScreen.id,
-                              arguments: wm);
-                      } catch (e) {
-                        streamController.sink
-                            .addError('Oops.. Something went Wrong!');
+                              .addError('Oops.. Something went Wrong!');
+                        }
                       }
                     }
-                  }
-                },
-                child: Text(
-                  'Get Weather',
-                  style: TextStyle(fontSize: 30.0),
+                  },
+                  child: Text(
+                    'Get Weather',
+                    style: TextStyle(fontSize: 30.0),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
