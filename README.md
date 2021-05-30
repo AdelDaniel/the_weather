@@ -65,17 +65,11 @@
 
 <div>
     <table>
-        <tr>  
             <td>   
                 <a>
                     <img src="read_me_files/i1.jpeg"/>
                 </a>
-            </td>   
-            <td> 
-                <a>
-                    <img src="read_me_files/i2.jpeg" />
-                </a>
-            </td>   
+            </td>    
             <td> 
                 <a>
                     <img src="read_me_files/i3.jpeg" />
@@ -84,3 +78,11 @@
         </tr>
      </table>
 </div>
+
+ <tr>    
+            <td> 
+                <a>
+                    <img src="read_me_files/i2.jpeg" />
+                </a>
+            </td> 
+        </tr>
